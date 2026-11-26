@@ -1,0 +1,28 @@
+name: extract-shaders
+on: workflow_dispatch
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x gradlew && ./gradlew build
+      - name: Extract shaders
+        run: |
+          mkdir -p shaders-out
+          find "$HOME/.gradle" . -name '*.jar' -size +5M 2>/dev/null | while read j; do
+            if unzip -l "$j" 2>/dev/null | grep -q 'assets/minecraft/shaders/'; then
+              echo "Found: $j" >> shaders-out/_source.txt
+              unzip -o -q "$j" 'assets/minecraft/shaders/*' -d shaders-out
+              break
+            fi
+          done
+          find shaders-out -type f > shaders-out/_list.txt || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: minecraft-shaders
+          path: shaders-out
