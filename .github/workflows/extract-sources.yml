@@ -1,0 +1,29 @@
+name: extract-sources
+on: workflow_dispatch
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/setup-gradle@v4
+      - run: chmod +x gradlew && ./gradlew genSources
+      - name: Extract render sources
+        run: |
+          mkdir -p src-out
+          find "$HOME/.gradle" . -name '*sources*.jar' 2>/dev/null | while read j; do
+            if unzip -l "$j" 2>/dev/null | grep -q 'net/minecraft/client/renderer'; then
+              echo "Found: $j" >> src-out/_source.txt
+              unzip -l "$j" | grep -E 'RenderPipeline|Lightmap|LightTexture|DynamicUniforms|GlobalSettingsUniform|UniformType|GpuBuffer' | awk '{print $4}' > src-out/_wanted.txt
+              unzip -o -q "$j" $(cat src-out/_wanted.txt) -d src-out || true
+              break
+            fi
+          done
+          find src-out -type f > src-out/_list.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: minecraft-sources
+          path: src-out
