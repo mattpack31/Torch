@@ -1,38 +1,31 @@
 {
-	"schemaVersion": 1,
-	"id": "realistic-torchlight",
-	"version": "${version}",
-	"name": "Realistic torchlight",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "CC0-1.0",
-	"icon": "assets/realistic-torchlight/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"com.mattpack31.realistic.torchlight.RealisticTorchlight"
-		],
-		"client": [
-			"com.mattpack31.realistic.torchlight.client.RealisticTorchlightClient"
-		]
-	},
-	"mixins": [
-		"realistic-torchlight.mixins.json",
-		{
-			"config": "realistic-torchlight.client.mixins.json",
-			"environment": "client"
-		}
-	],
-	"depends": {
-		"fabricloader": ">=0.20.1",
-		"minecraft": "~26.2",
-		"java": ">=25",
-		"fabric-api": "*"
-	}
+"schemaVersion": 1,
+"id": "realistic-torchlight",
+"version": "${version}",
+"name": "Realistic Torchlight",
+"description": "Luces dinamicas realistas por pixel con niveles de calidad ajustables.",
+"authors": [
+"mattpack31"
+],
+"contact": {
+"homepage": "https://github.com/mattpack31/Torch",
+"sources": "https://github.com/mattpack31/Torch"
+},
+"license": "CC0-1.0",
+"icon": "assets/realistic-torchlight/icon.png",
+"environment": "client",
+"entrypoints": {
+"main": [
+"com.mattpack31.realistic.torchlight.RealisticTorchlight"
+],
+"client": [
+"com.mattpack31.realistic.torchlight.client.RealisticTorchlightClient"
+]
+},
+"depends": {
+"fabricloader": ">=0.20.1",
+"minecraft": "~26.2",
+"java": ">=25",
+"fabric-api": "*"
+}
 }
