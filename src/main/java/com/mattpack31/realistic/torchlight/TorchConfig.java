@@ -21,6 +21,7 @@ public class TorchConfig {
     public boolean flickerEnabled = true;
     public boolean trueDarknessBoost = false;
     public boolean autoLowerQuality = true;
+public boolean debugOverlay = true;
     public int autoLowerFps = 30;
 
     private static Path path() {
