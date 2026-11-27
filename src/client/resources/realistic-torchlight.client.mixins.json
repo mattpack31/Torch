@@ -1,0 +1,14 @@
+{
+"required": true,
+"package": "com.mattpack31.realistic.torchlight.client.mixin",
+"compatibilityLevel": "JAVA_25",
+"client": [
+"RenderSystemMixin"
+],
+"injectors": {
+"defaultRequire": 1
+},
+"overwrites": {
+"requireAnnotations": true
+}
+}
