@@ -17,7 +17,7 @@ jobs:
           find "$HOME/.gradle" . -name '*sources*.jar' 2>/dev/null | while read j; do
             if unzip -l "$j" 2>/dev/null | grep -q 'net/minecraft/client/renderer'; then
               echo "Found: $j" >> src-out/_source.txt
-              unzip -l "$j" | grep -E 'RenderPipeline|Lightmap|LightTexture|DynamicUniforms|GlobalSettingsUniform|UniformType|GpuBuffer' | awk '{print $4}' > src-out/_wanted.txt
+              unzip -l "$j" | grep -E 'RenderPipeline|Lightmap|DynamicUniforms|GlobalSettingsUniform|UniformType|GpuBuffer|BindGroupLayout|RenderPass|RenderSystem|Std140|LevelRenderer|ChunkSectionsToRender|SectionRenderDispatcher|MappableRingBuffer|DynamicUniformStorage|CommandEncoder|GpuDevice' | awk '{print $4}' > src-out/_wanted.txt
               unzip -o -q "$j" $(cat src-out/_wanted.txt) -d src-out || true
               break
             fi
