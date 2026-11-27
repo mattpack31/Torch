@@ -25,7 +25,9 @@ base("torch_translucent_terrain")
 .withShaderDefine("ALPHA_CUTOUT", 0.1F)
 .build());
 
-private TorchPipelines() {}
+public static volatile boolean used = false;
+
+    private TorchPipelines() {}
 
 private static RenderPipeline.Builder base(String name) {
 return RenderPipeline.builder(RenderPipelines.TERRAIN_SNIPPET)

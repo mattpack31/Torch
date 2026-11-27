@@ -1,5 +1,6 @@
 package com.mattpack31.realistic.torchlight.client.mixin;
 
+import com.mattpack31.realistic.torchlight.RealisticTorchlight;
 import com.mattpack31.realistic.torchlight.client.LightScanner;
 import com.mattpack31.realistic.torchlight.client.TorchLightsUbo;
 import com.mattpack31.realistic.torchlight.client.TorchPipelines;
@@ -12,18 +13,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChunkSectionLayer.class)
 public class ChunkSectionLayerMixin {
-@Inject(method = "pipeline", at = @At("HEAD"), cancellable = true)
-private void torch$pipeline(CallbackInfoReturnable<RenderPipeline> cir) {
-if (LightScanner.getLights().isEmpty() || TorchLightsUbo.get() == null) {
-return;
-}
-Object self = this;
-if (self == ChunkSectionLayer.SOLID) {
-cir.setReturnValue(TorchPipelines.SOLID_TERRAIN);
-} else if (self == ChunkSectionLayer.CUTOUT) {
-cir.setReturnValue(TorchPipelines.CUTOUT_TERRAIN);
-} else if (self == ChunkSectionLayer.TRANSLUCENT) {
-cir.setReturnValue(TorchPipelines.TRANSLUCENT_TERRAIN);
-}
-}
+    @Inject(method = "pipeline", at = @At("HEAD"), cancellable = true)
+    private void torch$pipeline(CallbackInfoReturnable<RenderPipeline> cir) {
+        if (LightScanner.getLights().isEmpty() || TorchLightsUbo.get() == null) {
+            return;
+        }
+        Object self = this;
+        RenderPipeline chosen = null;
+        if (self == ChunkSectionLayer.SOLID) {
+            chosen = TorchPipelines.SOLID_TERRAIN;
+        } else if (self == ChunkSectionLayer.CUTOUT) {
+            chosen = TorchPipelines.CUTOUT_TERRAIN;
+        } else if (self == ChunkSectionLayer.TRANSLUCENT) {
+            chosen = TorchPipelines.TRANSLUCENT_TERRAIN;
+        }
+        if (chosen != null) {
+            if (!TorchPipelines.used) {
+                TorchPipelines.used = true;
+                RealisticTorchlight.LOGGER.info("[Torch] Pipeline de terreno propio en uso");
+            }
+            cir.setReturnValue(chosen);
+        }
+    }
 }
